@@ -1,0 +1,113 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "nome": "Nicolas Dias",
+      "telefone": "(31) 99999-9999",
+      "email": "nicolasbhgamer@gmail.com",
+      "dataNascimento": "2006-07-06T00:00:00Z",
+      "cep": "31260-020",
+      "endereco": "Av. teste, 123 - Centro",
+      "estado": "MG",
+      "cidade": "Belo Horizonte",
+      "senha": "senha",
+      "role": "paciente",
+      "filaId": 1,
+      "problemasRelatados": [
+        "Febre alta e Dor no peito"
+      ],
+      "relatoriosMedicosIds": [
+        1
+      ],
+      "criadoEm": "2025-04-24T08:00:00Z",
+      "atualizadoEm": "2025-04-24T10:00:00Z"
+    }
+  ],
+  "medicos": [
+    {
+      "id": 1,
+      "nome": "Dra. Mariana Sousa",
+      "email": "mariana@hospital.com",
+      "senha": "senha",
+      "role": "medico",
+      "especialidade": "Clínico Geral",
+      "hospitalId": 1,
+      "horarios": [
+        {
+          "dia": "Segunda",
+          "de": "08:00",
+          "ate": "12:00"
+        },
+        {
+          "dia": "Quarta",
+          "de": "14:00",
+          "ate": "18:00"
+        }
+      ],
+      "criadoEm": "2025-04-24T07:00:00Z",
+      "atualizadoEm": "2025-04-24T07:00:00Z"
+    }
+  ],
+  "filas": [
+    {
+      "id": 1,
+      "hospitalId": 1,
+      "especialidade": "Clínico Geral",
+      "entradas": [
+        {
+          "id": 1,
+          "idUsuario": 1,
+          "entrouEm": "2025-04-24T09:00:00Z",
+          "prioridade": "normal",
+          "status": "aguardando"
+        }
+      ],
+      "status": "aberta",
+      "tempoEsperaEstimado": 30,
+      "criadaEm": "2025-04-24T07:00:00Z",
+      "atualizadoEm": "2025-04-24T07:00:00Z"
+    }
+  ],
+  "hospitais": [
+    {
+      "id": 1,
+      "nome": "Hospital Central",
+      "endereco": "Av. Saúde, 123 - Centro",
+      "cep": "31450-350",
+      "estado": "MG",
+      "cidade": "Belo Horizonte",
+      "telefone": "(69) 69696-6969",
+      "filasIds": [
+        1
+      ],
+      "convenios": [
+        "Cassi",
+        "Unimed"
+      ],
+      "tiposAtendimento": [
+        "Presencial",
+        "Online"
+      ],
+      "especialidades": [
+        "Ortopedia",
+        "Pediatria",
+        "Clínico Geral"
+      ],
+      "criadoEm": "2025-04-24T07:00:00Z",
+      "atualizadoEm": "2025-04-24T07:00:00Z"
+    }
+  ],
+  "relatorios": [
+    {
+      "id": 1,
+      "pacienteId": 1,
+      "medicoId": 1,
+      "filaEntradaId": 1,
+      "texto": "Paciente apresenta sintomas gripais. Recomendado repouso.",
+      "inicioConsulta": "2025-04-24T10:00:00Z",
+      "fimConsulta": "2025-04-24T10:30:00Z",
+      "notas": "Paciente estável, sem complicações.",
+      "data": "2025-04-24T10:30:00Z"
+    }
+  ]
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Fila Presencial - MedFlux</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9fafb;
+            color: #222;
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 15px 30px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        p {
+            margin: 8px 0;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .info-section {
+            margin-top: 20px;
+        }
+
+        .info-section h3 {
+            margin-bottom: 12px;
+            color: #0d47a1;
+        }
+
+        .fila-info, .medicos-info, .horarios-info {
+            background: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #c5d9f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        .medico-nome {
+            font-weight: 600;
+        }
+
+        .medico-especialidade {
+            font-style: italic;
+            color: #555;
+            margin-left: 8px;
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #115293;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .voltar {
+            display: block;
+            margin: 30px auto 0;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            color: #1976d2;
+            border: 2px solid #1976d2;
+            padding: 10px 25px;
+            border-radius: 8px;
+            width: max-content;
+        }
+
+        .voltar:hover {
+            background-color: #1976d2;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>MedFlux - Fila Presencial</header>
+
+    <div class="container" id="container">
+        <h2 id="hospital-nome">Carregando hospital...</h2>
+        <p id="hospital-endereco"></p>
+        <p id="hospital-telefone"></p>
+
+        <div class="info-section">
+            <h3>Fila Atual</h3>
+            <div class="fila-info" id="fila-info">Carregando informações da fila...</div>
+        </div>
+
+        <div class="info-section">
+            <h3>Médicos Disponíveis</h3>
+            <div class="medicos-info" id="medicos-info">Carregando médicos...</div>
+        </div>
+
+        <div class="info-section">
+            <h3>Horários Livres para Reserva</h3>
+            <div class="horarios-info" id="horarios-info">Carregando horários...</div>
+        </div>
+    </div>
+
+    <a href="Convenio.html" class="voltar">← Voltar para Convênios</a>
+
+    <script>
+        const hospitais = {
+            "Hospital das Clínicas da UFMG": {
+                endereco: "Av. Professor Alfredo Balena, 110 - Santa Efigênia, Belo Horizonte - MG",
+                telefone: "(31) 3409-9000",
+                filaAtual: 14,
+                medicos: [
+                    { nome: "Dr. João Silva", especialidade: "Cardiologista", horasLivres: 2 },
+                    { nome: "Dra. Ana Pereira", especialidade: "Pediatra", horasLivres: 1.5 },
+                    { nome: "Dr. Carlos Souza", especialidade: "Ortopedista", horasLivres: 0.5 }
+                ],
+                horariosLivres: ["10:00", "11:30", "14:00", "15:30"]
+            },
+
+            "Hospital Mater Dei": {
+                endereco: "Av. dos Andradas, 3.000 - Santa Efigênia, Belo Horizonte - MG",
+                telefone: "(31) 3239-8000",
+                filaAtual: 20,
+                medicos: [
+                    { nome: "Dra. Marisa Costa", especialidade: "Dermatologista", horasLivres: 1 },
+                    { nome: "Dr. Felipe Lima", especialidade: "Neurologista", horasLivres: 2 },
+                ],
+                horariosLivres: ["09:30", "13:00", "16:00"]
+            },
+
+            "Hospital Felício Rocho": {
+                endereco: "Av. do Contorno, 9.500 - Santa Efigênia, Belo Horizonte - MG",
+                telefone: "(31) 3239-7000",
+                filaAtual: 8,
+                medicos: [
+                    { nome: "Dra. Luiza Fernandes", especialidade: "Ginecologista", horasLivres: 3 },
+                    { nome: "Dr. Pedro Gonçalves", especialidade: "Urologista", horasLivres: 1 },
+                ],
+                horariosLivres: ["08:30", "10:30", "12:00"]
+            }
+        };
+
+        function getParametroURL(nome) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(nome);
+        }
+
+        function preencherPagina() {
+            const hospitalNome = getParametroURL('hospital');
+            const titulo = document.getElementById('hospital-nome');
+            const enderecoP = document.getElementById('hospital-endereco');
+            const telefoneP = document.getElementById('hospital-telefone');
+            const filaInfo = document.getElementById('fila-info');
+            const medicosInfo = document.getElementById('medicos-info');
+            const horariosInfo = document.getElementById('horarios-info');
+
+            if (!hospitalNome || !hospitais[hospitalNome]) {
+                titulo.textContent = "Hospital não encontrado";
+                enderecoP.textContent = "";
+                telefoneP.textContent = "";
+                filaInfo.textContent = "";
+                medicosInfo.textContent = "";
+                horariosInfo.textContent = "";
+                return;
+            }
+
+            const hospital = hospitais[hospitalNome];
+
+            titulo.textContent = hospitalNome;
+            enderecoP.textContent = "Endereço: " + hospital.endereco;
+            telefoneP.textContent = "Telefone: " + hospital.telefone;
+
+            filaInfo.textContent = `Atualmente, ${hospital.filaAtual} pessoas aguardam atendimento.`;
+
+            medicosInfo.innerHTML = '';
+            hospital.medicos.forEach(medico => {
+                const divMedico = document.createElement('div');
+                divMedico.innerHTML = `<span class="medico-nome">${medico.nome}</span> <span class="medico-especialidade">(${medico.especialidade})</span> - Horas livres: ${medico.horasLivres.toFixed(1)}h`;
+                medicosInfo.appendChild(divMedico);
+            });
+
+            horariosInfo.innerHTML = '';
+            if (hospital.horariosLivres.length === 0) {
+                horariosInfo.textContent = "Nenhum horário livre disponível no momento.";
+            } else {
+                const ul = document.createElement('ul');
+                hospital.horariosLivres.forEach(horario => {
+                    const li = document.createElement('li');
+                    li.textContent = horario;
+
+                    const btn = document.createElement('button');
+                    btn.textContent = "Reservar";
+                    btn.onclick = () => {
+                        alert(`Você reservou um lugar no hospital ${hospitalNome} para o horário ${horario}.`);
+                    };
+
+                    li.appendChild(btn);
+                    ul.appendChild(li);
+                });
+                horariosInfo.appendChild(ul);
+            }
+        }
+
+        preencherPagina();
+    </script>
+</body>
+</html>

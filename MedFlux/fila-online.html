@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fila On-line - MedFlux</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+
+        .logo::before {
+            content: "🩺 ";
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #1976d2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .medico-card {
+            background-color: #e3f2fd;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .medico-card strong {
+            color: #1976d2;
+        }
+
+        .consulta-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .consulta-btn:hover {
+            background-color: #1565c0;
+        }
+
+        .voltar {
+            display: block;
+            margin: 20px auto 0;
+            text-align: center;
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        /* Estilo do pop-up */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .popup {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup h3 {
+            margin-bottom: 15px;
+            color: #1976d2;
+        }
+
+        .popup button.horario {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            background-color: #1976d2;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .popup button.horario:hover {
+            background-color: #1565c0;
+        }
+
+        .popup .fechar {
+            margin-top: 20px;
+            color: #1976d2;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">MedFlux</div>
+    </header>
+
+    <div class="container">
+        <h2 id="titulo-fila">Fila On-line</h2>
+
+        <div class="info" id="info-hospital">
+            <!-- Conteúdo JS -->
+        </div>
+
+        <a href="convenio.html" class="voltar">← Voltar aos Hospitais</a>
+    </div>
+
+    <!-- Pop-up de seleção de horário -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <h3 id="popup-titulo">Escolha um horário</h3>
+            <div id="horarios-container"></div>
+            <button class="fechar" onclick="fecharPopup()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        const dadosHospitais = {
+            "Hospital das Clínicas da UFMG": {
+                espera: "25 minutos",
+                medicos: [
+                    { nome: "Dr. João Almeida", horarios: ["09:00", "10:30", "14:00"] },
+                    { nome: "Dra. Marina Tavares", horarios: ["11:00", "13:30", "16:00"] }
+                ]
+            },
+            "Hospital Mater Dei": {
+                espera: "40 minutos",
+                medicos: [
+                    { nome: "Dra. Paula Mendes", horarios: ["08:30", "11:00", "15:30"] },
+                    { nome: "Dr. Luiz Carvalho", horarios: ["09:15", "12:45", "17:00"] }
+                ]
+            }
+        };
+
+        const params = new URLSearchParams(window.location.search);
+        const hospital = decodeURIComponent(params.get('hospital'));
+        const titulo = document.getElementById('titulo-fila');
+        const infoDiv = document.getElementById('info-hospital');
+
+        const popupOverlay = document.getElementById('popup-overlay');
+        const popupTitulo = document.getElementById('popup-titulo');
+        const horariosContainer = document.getElementById('horarios-container');
+
+        function marcarConsulta(medicoNome, horarios) {
+            popupTitulo.textContent = `Escolha um horário com ${medicoNome}`;
+            horariosContainer.innerHTML = "";
+
+            horarios.forEach(horario => {
+                const btn = document.createElement("button");
+                btn.className = "horario";
+                btn.textContent = horario;
+                btn.onclick = () => {
+                    alert(`Consulta com ${medicoNome} marcada para ${horario}!`);
+                    fecharPopup();
+                };
+                horariosContainer.appendChild(btn);
+            });
+
+            popupOverlay.style.display = "flex";
+        }
+
+        function fecharPopup() {
+            popupOverlay.style.display = "none";
+        }
+
+        if (hospital && dadosHospitais[hospital]) {
+            const dados = dadosHospitais[hospital];
+            titulo.textContent = `Fila On-line - ${hospital}`;
+            let html = `<p><strong>Tempo de Espera Estimado:</strong> ${dados.espera}</p>`;
+            html += `<p><strong>Especialistas disponíveis:</strong></p>`;
+
+            // Criar o HTML dos médicos e associar evento depois
+            infoDiv.innerHTML = '';
+            dados.medicos.forEach((medico, index) => {
+                // Criar div do médico
+                const divMedico = document.createElement('div');
+                divMedico.className = 'medico-card';
+                divMedico.innerHTML = `
+                    <p><strong>${medico.nome}</strong></p>
+                    <p>Horários: ${medico.horarios.join(", ")}</p>
+                `;
+
+                // Criar botão
+                const btn = document.createElement('button');
+                btn.className = 'consulta-btn';
+                btn.textContent = 'Marcar Consulta';
+                btn.onclick = () => marcarConsulta(medico.nome, medico.horarios);
+
+                divMedico.appendChild(btn);
+                infoDiv.appendChild(divMedico);
+            });
+        } else {
+            titulo.textContent = 'Hospital não encontrado';
+            infoDiv.innerHTML = '<p>Não foi possível localizar informações sobre este hospital.</p>';
+        }
+    </script>
+</body>
+
+</html>

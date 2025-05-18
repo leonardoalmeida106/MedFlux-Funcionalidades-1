@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Hospitais Conveniados - MedFlux</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f0f8ff;
+            color: #333;
+        }
+
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-right: auto;
+        }
+
+        .logo::before {
+            content: "🩺 ";
+        }
+
+        .search-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .search-bar {
+            width: 60%;
+            padding: 10px 10px 10px 35px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #1976d2;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #1976d2;
+            text-align: center;
+        }
+
+        .hospitais {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            justify-content: space-between;
+        }
+
+        .hospital {
+            background-color: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+
+        .hospital h3 {
+            font-size: 20px;
+            color: #1976d2;
+        }
+
+        .hospital p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background-color: #1976d2;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 14px;
+            width: 48%;
+        }
+
+        button:hover {
+            background-color: #1565c0;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.voltar {
+            margin-top: 30px;
+            padding: 15px 30px;
+            display: block;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .buttons button {
+                width: 100%;
+            }
+
+            .search-bar {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">MedFlux</div>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search" class="search-bar" placeholder="Pesquisar hospital..." oninput="filtrarHospitais()" />
+    </div>
+
+    <div class="container">
+        <h2>Hospitais Conveniados em Belo Horizonte</h2>
+
+        <div class="hospitais" id="hospital-list">
+            <div class="hospital">
+                <h3>Hospital das Clínicas da UFMG</h3>
+                <p>Endereço: Av. Professor Alfredo Balena, 110 - Santa Efigênia, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3409-9000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital das Clínicas da UFMG')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital das Clínicas da UFMG')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital Mater Dei</h3>
+                <p>Endereço: Av. dos Andradas, 3.000 - Santa Efigênia, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3239-8000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital Mater Dei')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital Mater Dei')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital Felício Rocho</h3>
+                <p>Endereço: Av. do Contorno, 9.500 - Santa Efigênia, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3239-7000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital Felício Rocho')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital Felício Rocho')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital Santa Casa de Belo Horizonte</h3>
+                <p>Endereço: Av. Augusto de Lima, 1.700 - Barro Preto, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3238-9000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital Santa Casa de Belo Horizonte')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital Santa Casa de Belo Horizonte')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital Unimed Belo Horizonte</h3>
+                <p>Endereço: Rua dos Três Corações, 45 - Funcionários, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3242-9000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital Unimed Belo Horizonte')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital Unimed Belo Horizonte')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital Vila da Serra</h3>
+                <p>Endereço: Rua Alvarenga, 2.400 - Vila da Serra, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3279-5000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital Vila da Serra')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital Vila da Serra')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital João XXIII</h3>
+                <p>Endereço: Av. do Contorno, 5.000 - Barro Preto, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3229-4000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital João XXIII')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital João XXIII')">Ver Fila Presencial</button>
+                </div>
+            </div>
+
+            <div class="hospital">
+                <h3>Hospital LifeCenter</h3>
+                <p>Endereço: Rua Afonso Pena, 4.000 - Lourdes, Belo Horizonte - MG</p>
+                <p>Telefone: (31) 3289-8000</p>
+                <div class="buttons">
+                    <button onclick="verFilaOnline('Hospital LifeCenter')">Ver Fila On-line</button>
+                    <button onclick="verFilaPresencial('Hospital LifeCenter')">Ver Fila Presencial</button>
+                </div>
+            </div>
+        </div>
+
+      
+    </div>
+
+    <script>
+        function filtrarHospitais() {
+            const filtro = document.getElementById('search').value.toLowerCase();
+            const hospitais = document.querySelectorAll('.hospital');
+            hospitais.forEach(hospital => {
+                const nomeHospital = hospital.querySelector('h3').textContent.toLowerCase();
+                if (nomeHospital.includes(filtro)) {
+                    hospital.style.display = '';
+                } else {
+                    hospital.style.display = 'none';
+                }
+            });
+        }
+
+        function verFilaOnline(hospitalNome) {
+            const nomeCodificado = encodeURIComponent(hospitalNome);
+            window.location.href = `fila-online.html?hospital=${nomeCodificado}`;
+        }
+
+        function verFilaPresencial(hospitalNome) {
+            const nomeCodificado = encodeURIComponent(hospitalNome);
+            window.location.href = `fila-presencial.html?hospital=${nomeCodificado}`;
+        }
+    </script>
+</body>
+</html>
